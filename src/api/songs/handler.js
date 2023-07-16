@@ -1,5 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
-const autoBind = require("auto-bind");
+const autoBind = require('auto-bind');
 
 class SongsHandler {
   constructor(service, validator) {
@@ -14,8 +13,8 @@ class SongsHandler {
     const songId = await this._service.addSong(request.payload);
 
     const response = h.response({
-      status: "success",
-      message: "Lagu berhasil ditambahkan",
+      status: 'success',
+      message: 'Lagu berhasil ditambahkan',
       data: {
         songId,
       },
@@ -28,7 +27,7 @@ class SongsHandler {
     const { title, performer } = request.query;
     const songs = await this._service.getSongs(title, performer);
     const response = h.response({
-      status: "success",
+      status: 'success',
       data: {
         songs,
       },
@@ -40,7 +39,7 @@ class SongsHandler {
     const { id } = request.params;
     const song = await this._service.getSongById(id);
     const response = h.response({
-      status: "success",
+      status: 'success',
       data: {
         song,
       },
@@ -53,8 +52,8 @@ class SongsHandler {
     const { id } = request.params;
     await this._service.editSongById(id, request.payload);
     const response = h.response({
-      status: "success",
-      message: "Lagu telah diperbarui",
+      status: 'success',
+      message: 'Lagu telah diperbarui',
     });
     return response;
   }
@@ -63,8 +62,8 @@ class SongsHandler {
     const { id } = request.params;
     await this._service.deleteSongById(id);
     const response = h.response({
-      status: "success",
-      message: "Lagu telah dihapus",
+      status: 'success',
+      message: 'Lagu telah dihapus',
     });
     return response;
   }
