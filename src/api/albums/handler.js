@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const autoBind = require("auto-bind");
+const autoBind = require('auto-bind');
 
 class AlbumsHandler {
   constructor(service, validator) {
@@ -15,8 +15,8 @@ class AlbumsHandler {
     const albumId = await this._service.addAlbum({ name, year });
 
     const response = h.response({
-      status: "success",
-      message: "Album berhasil ditambahkan",
+      status: 'success',
+      message: 'Album berhasil ditambahkan',
       data: {
         albumId,
       },
@@ -31,7 +31,7 @@ class AlbumsHandler {
     const songs = await this._service.getSongsByAlbumId(id);
 
     const response = h.response({
-      status: "success",
+      status: 'success',
       data: {
         album: {
           ...album,
@@ -47,8 +47,8 @@ class AlbumsHandler {
     const { id } = request.params;
     await this._service.editAlbumById(id, request.payload);
     const response = h.response({
-      status: "success",
-      message: "Album telah diperbarui",
+      status: 'success',
+      message: 'Album telah diperbarui',
     });
     return response;
   }
@@ -57,8 +57,8 @@ class AlbumsHandler {
     const { id } = request.params;
     await this._service.deleteAlbumById(id);
     const response = h.response({
-      status: "success",
-      message: "Album telah dihapus",
+      status: 'success',
+      message: 'Album telah dihapus',
     });
     return response;
   }
