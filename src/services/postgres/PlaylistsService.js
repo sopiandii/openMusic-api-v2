@@ -18,7 +18,7 @@ class PlaylistsService {
     };
 
     const result = await this._pool.query(query);
-    if (!result.rows[0].id) {
+    if (!result.rowCount) {
       throw new InvariantError('Playlist gagal ditambahkan');
     }
     return result.rows[0].id;
@@ -147,6 +147,54 @@ class PlaylistsService {
     if (!result.rowCount) {
       throw new InvariantError('Lagu gagal dihapus.');
     }
+  }
+
+  async addPlaylistActivityLog({
+    playlistId,
+    songId,
+    userId,
+    activity,
+  }) {
+    const id = `activity-${nanoid(15)}`;
+    const timeLog = new Date().toISOString();
+
+    const query = {
+      text: 'INSERT INTO activity_logs VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      values: [id, playlistId, songId, userId, activity, timeLog],
+    };
+
+    const result = await this._pool.query(query);
+    if (!result.rows[0].id) {
+      throw new InvariantError('Aktivitas gagal ditambahkan');
+    }
+  }
+
+  async getPlaylistActivityLogs(playlistId) {
+    const query = {
+      text: `SELECT users.username, songs.title, activity_logs.activity, activity_logs.time FROM activity_logs
+              LEFT JOIN playlists ON activity_logs.playlist_id = playlists.id
+              LEFT JOIN songs ON activity_logs.song_id = songs.id
+              LEFT JOIN users ON activity_logs.user_id = users.id
+              WHERE playlists.id = $1`,
+      values: [playlistId],
+    };
+
+    const result = await this._pool.query(query);
+    if (!result.rowCount) {
+      throw new NotFoundError('Playlist tidak ditemukan');
+    }
+
+    const activityLog = result.rows.map((row) => ({
+      username: row.username,
+      title: row.title,
+      action: row.activity,
+      time: row.time,
+    }));
+
+    return {
+      playlistId,
+      activities: activityLog,
+    };
   }
 }
 
