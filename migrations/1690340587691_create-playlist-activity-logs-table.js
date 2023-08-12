@@ -16,7 +16,7 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       notNull: true,
     },
-    action: {
+    activity: {
       type: 'VARCHAR(50)',
       notNull: true,
     },
